@@ -16,6 +16,10 @@ import com.analog.adis16470.frc.ADIS16470_IMU;
  * project.
  */
 public class Robot extends TimedRobot {
+
+
+  private static final double kAngleSetpoint = 0.0;
+	 private static final double kP = 0.005; // propotional turning constant
  
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
@@ -29,6 +33,8 @@ public class Robot extends TimedRobot {
   private final CANSparkMax m_leftMotor1 = new CANSparkMax(Constants.leftMotor1ID, MotorType.kBrushed);
   private final CANSparkMax m_rightMotor1 = new CANSparkMax(Constants.rightMotor1ID, MotorType.kBrushed);
 
+  public static final ADIS16470_IMU imu = new ADIS16470_IMU();
+ 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -38,6 +44,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    imu.calibrate();
+    imu.reset();
   }
 
   /**
@@ -131,6 +139,9 @@ public class Robot extends TimedRobot {
     m_robotDrive.tankDrive(controller.getLeftY(), controller.getRightY());
     System.out.println(m_rightMotor1.getAppliedOutput());
     System.out.println(m_leftMotor1.getAppliedOutput());
+
+    double turningValue = (kAngleSetpoint - imu.getAngle()) * kP;
+		  
   }
 
   @Override
