@@ -28,8 +28,11 @@ public final class Autos {
           
         
      */
-    return new RunCommand(() -> /*COMMAND*/)
-        
+    /*
+    return new RunCommand(() -> something.method(argument, argument))
+      .withTimeout(10)
+      .andThen(new RunCommand(() -> something.method(argument, argument))
+    */
   }
 
   private Autos() {
