@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
 
 
   private static final double kAngleSetpoint = 0.0;
-	 private static final double kP = 0.005; // propotional turning constant
+	private static final double kP = 0.005; // propotional turning constant
  
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
