@@ -26,7 +26,13 @@ public final class Autos {
           *  .withTimeout(seconds) waits a set amount of seconds - NEVER USE IN RELATION TO POSITION
         
      */
-    return new RunCommand(() -> drivetrain.arcadeDrive(-.5, 0), drivetrain)
+    return new RunCommand(() -> drivetrain.arcadeDrive(.5, 0), drivetrain) //move forward at 50% speed
+      .withTimeout(0.5) //wait 0.5 seconds
+      .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0), drivetrain))//stop
+      .withTimeout(0.5) //wait 0.5 seconds
+      .andThen(new RunCommand(() -> drivetrain.arcadeDrive(-.5, 0), drivetrain))//move backwards at 50% speed
+      .withTimeout(0.5) //wait 0.5 seconds
+      .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0), drivetrain));
         
   }
 
