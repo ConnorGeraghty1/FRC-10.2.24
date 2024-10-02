@@ -16,9 +16,18 @@ import com.analog.adis16470.frc.ADIS16470_IMU;
  * project.
  */
 public class Robot extends TimedRobot {
+ 
   private Command m_autonomousCommand;
-
   private RobotContainer m_robotContainer;
+
+  private DifferentialDrive m_robotDrive;
+  private XboxController controller;
+  
+  private final CANSparkMax m_leftMotor = new CANSparkMax(Constants.leftMotorID, MotorType.kBrushed);
+  private final CANSparkMax m_rightMotor = new CANSparkMax(Constants.rightMotorID, MotorType.kBrushed);
+
+  private final CANSparkMax m_leftMotor1 = new CANSparkMax(Constants.leftMotor1ID, MotorType.kBrushed);
+  private final CANSparkMax m_rightMotor1 = new CANSparkMax(Constants.rightMotor1ID, MotorType.kBrushed);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -63,11 +72,16 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
+    
+    
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    
+  }
 
   @Override
   public void teleopInit() {
@@ -78,11 +92,46 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    m_rightMotor.restoreFactoryDefaults();
+    m_leftMotor.restoreFactoryDefaults();
+    m_leftMotor1.restoreFactoryDefaults();
+    m_rightMotor1.restoreFactoryDefaults();
+
+    m_leftMotor1.follow(m_leftMotor);
+    m_rightMotor1.follow(m_rightMotor, true); 
+
+    SendableRegistry.addChild(m_robotDrive, m_leftMotor);
+    SendableRegistry.addChild(m_robotDrive, m_rightMotor);
+
+    // We need to invert one side of the drivetrain so that positive voltages
+    // result in both sides moving forward. Depending on how your robot's
+    // gearbox is constructed, you might have to invert the left side instead.
+
+      
+
+
+    // m_rightMotor.setInverted(false);
+    // m_leftMotor.setInverted(false);
+    // m_rightMotor1.setInverted(false);
+    // m_leftMotor1.setInverted(false);
+
+    m_rightMotor.burnFlash();
+    m_leftMotor.burnFlash();
+    m_rightMotor1.burnFlash();
+    m_leftMotor1.burnFlash();
+
+    m_robotDrive = new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
+    controller = new XboxController(0);
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_robotDrive.tankDrive(controller.getLeftY(), controller.getRightY());
+    System.out.println(m_rightMotor1.getAppliedOutput());
+    System.out.println(m_leftMotor1.getAppliedOutput());
+  }
 
   @Override
   public void testInit() {
