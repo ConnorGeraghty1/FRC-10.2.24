@@ -24,15 +24,11 @@ public final class Autos {
         IMPORTANT METHOD(S)
           *  drivetrain.arcadeDrive( forward/backward velocity , CW/CCW velocity )    //sets position and angle
           *  .withTimeout(seconds) waits a set amount of seconds - NEVER USE IN RELATION TO POSITION
+          *  .andThen(command) does the next command 
+          
         
      */
-    return new RunCommand(() -> drivetrain.arcadeDrive(.5, 0), drivetrain) //move forward at 50% speed
-      .withTimeout(0.5) //wait 0.5 seconds
-      .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0), drivetrain))//stop
-      .withTimeout(0.5) //wait 0.5 seconds
-      .andThen(new RunCommand(() -> drivetrain.arcadeDrive(-.5, 0), drivetrain))//move backwards at 50% speed
-      .withTimeout(0.5) //wait 0.5 seconds
-      .andThen(new RunCommand(() -> drivetrain.arcadeDrive(0, 0), drivetrain));
+    return new RunCommand(() -> /*COMMAND*/)
         
   }
 
